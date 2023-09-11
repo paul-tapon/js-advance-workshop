@@ -5,7 +5,7 @@
 
 ```shell
 1. Open Sql Server Management Studio (SSMS)
-2. Copy and paste the follwoing scripts below
+2. Copy and paste the follwoing scripts below :
 
 use Master
 
@@ -20,7 +20,18 @@ insert Todos (Title,Description,DueDate) VALUES('Test todo 1','Test todo descrip
 3. Press F5 or click Execute
 ```
 
-1. A numbered list
-    1. A nested numbered list
-    2. Which is numbered
-2. Which is numbered
+
+## Running API and WEB
+
+1. Open VSCode and open the folder targetting the root folder of the **js-advance-workshop** folder
+2. Open new terminal within VSCode 
+3. On ther terminal execute the following commands. 
+
+```shell
+cd api
+npm install
+npx ts-node ./src/index.ts
+```
+
+
+4. Openn new Terminal
