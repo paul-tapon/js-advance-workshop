@@ -4,7 +4,7 @@
 ## Database setup
 
 ```shell
-1. Open Sql Server Management Studio (SSMS)
+1. Open Sql Server Management Studio (SSMS) and press **control+n**
 2. Copy and paste the following scripts below :
 
 use Master
