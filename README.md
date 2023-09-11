@@ -24,8 +24,9 @@ insert Todos (Title,Description,DueDate) VALUES('Test todo 1','Test todo descrip
 ## Running API and WEB
 
 1. Open VSCode and open the folder targetting the root folder of the **js-advance-workshop** folder
-2. Open new terminal within VSCode 
-3. On ther terminal execute the following commands. 
+2. Inside VSCode, open API's .env file inside **./api** folder and update the database config settings e.g (server,db name, username and password)
+3. Open new terminal within VSCode 
+4. On ther terminal execute the following commands. 
 
 ```shell
 cd api
@@ -33,5 +34,9 @@ npm install
 npx ts-node ./src/index.ts
 ```
 
-
-4. Openn new Terminal
+4. Running web - Open another Terminal and execute the following commands.
+```shell
+cd web
+npm install
+ng serve --o
+```
