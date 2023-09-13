@@ -3,11 +3,9 @@ import todoRouter from './todo/todoRoutes';
 
 import cors  from 'cors'
 import bodyParser  from 'body-parser'
-
-import * as dotenv from "dotenv";
 import acccountRouter from './account/accountRoutes';
+import appConfig from './infrastructure';
 
-dotenv.config({ path: __dirname+'/../.env' });
 
 const app = express();
 
@@ -23,6 +21,6 @@ app.use('/account', acccountRouter);
 //End of Routes
 
 
-app.listen(process.env.PORT_NUMBER,()=>{
-  console.log(`API running at ${process.env.PORT_NUMBER}`);
+app.listen(appConfig.port,()=>{
+  console.log(`API running at ${appConfig.port}`);
 });

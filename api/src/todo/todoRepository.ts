@@ -1,11 +1,11 @@
 import sql from 'mssql';
-import dbConfig from '../infrastructure/dbConfig';
+import appConfig from '../infrastructure';
 
 export class todoRepository {
    constructor() {}
 
    async getAll() {
-      const pool = await sql.connect(dbConfig());
+      const pool = await sql.connect(appConfig.database);
 
       //TODO : if expected to return thousand records implement pagination and projection
       var query = await pool
@@ -16,7 +16,7 @@ export class todoRepository {
    }
 
    async search(title:string,description:string) {
-      const pool = await sql.connect(dbConfig());
+      const pool = await sql.connect(appConfig.database);
 
       title = title.replace("'","").replace("-","").replace(";",""); //apply basic sanitation
       description = description.replace("'","").replace("-","").replace(";",""); //apply basic sanitation
@@ -32,7 +32,7 @@ export class todoRepository {
    async create(body: any) {
       const query =
          'INSERT into Todos (Title,[Description],DueDate)  VALUES(@title,@description,@dueDate) ; SELECT SCOPE_IDENTITY() as todoId';
-      const pool = await sql.connect(dbConfig());
+      const pool = await sql.connect(appConfig.database);
 
       const insertTodo = await pool
          .request()
@@ -47,7 +47,7 @@ export class todoRepository {
    }
 
    async getById(id: number) {
-      let pool = await sql.connect(dbConfig());
+      let pool = await sql.connect(appConfig.database);
       let todos = await pool
          .request()
          .input('id', id)
@@ -60,7 +60,7 @@ export class todoRepository {
    async update(body: any, id: number) {
       const query =
          'UPDATE Todos set Title=@title,[Description]=@description,DueDate=@dueDate where TodoId=@id';
-      const pool = await sql.connect(dbConfig());
+      const pool = await sql.connect(appConfig.database);
 
       const updateTodo = await pool
          .request()

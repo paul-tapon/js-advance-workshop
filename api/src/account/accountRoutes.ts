@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import jwt from 'jsonwebtoken';
 import moment from 'moment';
+import appConfig from '../infrastructure';
 
 const acccountRouter = Router();
 
@@ -42,30 +43,21 @@ acccountRouter.post('/login',async (request, response, next) => {
 });
 
 
-acccountRouter.get('/login',async (request, response, next) => {
-    try {
-        const body = {...request.body};
-        //for simulation purposes only, username should be check from a datasource
-    console.log('login get async');
-    response.json({success:true});
-
-    } catch (error) {
-        console.log(error);
-        response.statusCode = 500;
-    }
-       
-});
-
 
 function generateAccessToken(username:string) {
-    
-    const options:jwt.SignOptions  = {
-        expiresIn:process.env.JWT_EXPIRATION_SECONDS+'s' //15mins 
-    };
+    const token = jwt.sign({ userId: 1, username: username, role: 'super_admin' }, appConfig.jwt.secret!, {
+        expiresIn: appConfig.jwt.expiration,
+        notBefore: '0', 
+        algorithm: 'HS256',
+        audience: appConfig.jwt.audience,
+        issuer: appConfig.jwt.issuer
+    });
 
-    console.log('generating token');
-    return jwt.sign({username},String(process.env.SECRET_KEY),options);
+    return token;
 }
+
+
+
 
 
 

@@ -2,6 +2,9 @@ import { Router } from 'express';
 import { todoRepository } from './todoRepository';
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
+import { checkJwt } from '../middlewares/checkAccessToken';
+import { Request, Response, NextFunction } from 'express';
+
 
 const todoRouter = Router();
 const repository = new todoRepository();
@@ -48,7 +51,7 @@ const postTodoSchema = {
         }
     ]
 */
-todoRouter.get('/', async (request, response, next) => {
+todoRouter.get('/', [checkJwt],async (request:Request, response:Response, next:NextFunction) => {
    try {
       response.json(await repository.getAll());
    } catch (err) {
@@ -57,7 +60,7 @@ todoRouter.get('/', async (request, response, next) => {
    }
 });
 
-todoRouter.get('/search', async (request, response) => {
+todoRouter.get('/search', [checkJwt],async (request:Request, response:Response, next:NextFunction) => {
    try {
       response.json(await repository.search(request.query.title as string,request.query.description as string));
    } catch (err) {
@@ -84,7 +87,7 @@ todoRouter.get('/search', async (request, response) => {
         "todoId": 1033
     }
 */
-todoRouter.post('/', async (request, response, next) => {
+todoRouter.post('/', [checkJwt],async (request:Request, response:Response, next:NextFunction) => {
    try {
       
       const body = { ...request.body };
@@ -148,7 +151,7 @@ todoRouter.post('/', async (request, response, next) => {
         "dueDate": "2023-09-05T00:00:00.000Z"
     },
 */
-todoRouter.get('/:id', async (request, response, next) => {
+todoRouter.get('/:id',[checkJwt],async (request:Request, response:Response, next:NextFunction) => {
    try {
       const todo = await repository.getById(Number(request.params.id));
       response.json({ ...todo });
@@ -173,7 +176,7 @@ todoRouter.get('/:id', async (request, response, next) => {
         "success" : true
     }
 */
-todoRouter.patch('/:id', async (request, response, next) => {
+todoRouter.patch('/:id', [checkJwt],async (request:Request, response:Response, next:NextFunction) => {
    try {
       const body = { ...request.body };
       const success =
