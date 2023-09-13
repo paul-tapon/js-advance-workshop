@@ -57,6 +57,15 @@ todoRouter.get('/', async (request, response, next) => {
    }
 });
 
+todoRouter.get('/search', async (request, response) => {
+   try {
+      response.json(await repository.search(request.query.title as string,request.query.description as string));
+   } catch (err) {
+      response.statusCode = 500;
+      response.end();
+   }
+});
+
 /* 
     URL : POST http://localhost:8010/todo
 

@@ -1,17 +1,14 @@
 import { Injectable } from '@angular/core';
 import { TodoService } from './todo.service';
 import { BehaviorSubject, Observable, Subscription, catchError, map, pipe, tap, throwError } from 'rxjs';
-import { Todo } from './todoTypes';
+import { Todo, TodoPatchResponse } from './todoTypes';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
     providedIn: 'root',
 })
 export class TodoStoreService {
-    constructor(private todosService: TodoService) {
-        console.log('TodoStoreService constructor');
-        this.getAll();
-    }
+    
 
     // - We set the initial state in BehaviorSubject's constructor
     // - Nobody outside the Store should have access to the BehaviorSubject
@@ -31,6 +28,11 @@ export class TodoStoreService {
     readonly uncompletedTodos$ = this.todos$.pipe(
         map(todos => todos.filter(todo => !todo.isCompleted))
     );
+
+    constructor(private todosService: TodoService) {
+        console.log('TodoStoreService constructor');
+        this.getAll();
+    }
 
     // the getter will return the last value emitted in _todos subject
     get todos(): Todo[] {
@@ -59,7 +61,7 @@ export class TodoStoreService {
         .subscribe();
     }
 
-    async removeTodo(id: number, serverRemove = true) {
+    removeTodo(id: number, serverRemove = true) {
         const todo = this.todos.find(t => t.todoId === id);
         this.todos = this.todos.filter(todo => todo.todoId !== id);
 
@@ -75,14 +77,48 @@ export class TodoStoreService {
         // }
     }
 
+    updateTodo(id:number,todo: Todo) : Subscription {
+        const todoInstance = this.todos.find(t => t.todoId === id);
+
+        //optimistic update
+        todoInstance.title = todo.title;
+        todoInstance.description = todo.description;
+        todoInstance.dueDate = todo.dueDate;
+
+        //optimistic update - we will not wait from the API for success response, this will look our platform is fast :)
+        //if the create operation is failed we will handle it separately :)
+        //this.todos = [...this.todos, todo];
+
+        return this.todosService
+            .patch(id,todo)
+            .pipe(
+                tap((response:TodoPatchResponse) => {}),
+                catchError(error => this.handleUpdateError(error, todo))
+            )
+        .subscribe();
+    }
+
     getAll() {
         this.todosService.getAll().subscribe(todos => (this.todos = todos));
     }
 
+    search(searchQuery:string) {
+        this.todosService.search(searchQuery).subscribe(todos => (this.todos = todos));
+    }
+
+    getById(id:number):Observable<Todo>{
+        return this.todosService.getById(id);
+    }
+
+
     private handleCreateError(error: HttpErrorResponse, todoRequest: Todo) {
-        let errorMessage = '';
-        console.log('handleCreateError');
+        let errorMessage = 'Create error';
         this.removeTodo(0, false);
+        return throwError(() => errorMessage);
+    }
+
+    private handleUpdateError(error: HttpErrorResponse, todoRequest: Todo) {
+        let errorMessage = 'Update error';
         return throwError(() => errorMessage);
     }
 }

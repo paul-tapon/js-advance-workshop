@@ -4,7 +4,7 @@
   Create Todo
 </h5>
 <button
-  type="button"
+  type="button" (click)="onCancelAdd()"
   data-drawer-dismiss="drawer-create-product-default"
   aria-controls="drawer-create-product-default"
   class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 right-2.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
@@ -22,7 +22,7 @@
   <span class="sr-only">Close menu</span>
 </button>
 
-<form [formGroup]="createTodoFormGroup" (ngSubmit)="onSubmitForm()" class="">
+<form [formGroup]="todoFormGroup" (ngSubmit)="onSubmitForm()" class="">
   <div class="space-y-4">
     <div>
       <label
@@ -82,8 +82,7 @@
     </div>
     <div class="relative z-0 w-full mb-6 group">
       <input
-        type="date"
-        [formControlName]="'dueDate'"
+        type="date" (change)="onMyDateChange($event)"  value="{{ todoEdit?.dueDate | date:'yyyy-MM-dd' }}"
         class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
         placeholder=" "
         required />

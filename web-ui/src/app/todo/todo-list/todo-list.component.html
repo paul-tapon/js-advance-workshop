@@ -19,7 +19,7 @@
               <th
                 scope="col"
                 class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                Product Name
+                Title
               </th>
 
               <th
@@ -87,11 +87,12 @@
                 <button
                   type="button"
                   id="updateProductButton"
+                  (click)="onUpdateTodo(todo)"
                   data-drawer-target="drawer-update-product-default"
                   data-drawer-show="drawer-update-product-default"
                   aria-controls="drawer-update-product-default"
                   data-drawer-placement="right"
-                  class="inline-flex items-center px-3 py-2 text-xs font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                  class="inline-flex items-center px-3 py-2 text-xs font-medium text-center text-white rounded-lg bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                   <svg
                     class="w-4 h-4 mr-2"
                     fill="currentColor"
@@ -113,7 +114,7 @@
                   data-drawer-show="drawer-delete-product-default"
                   aria-controls="drawer-delete-product-default"
                   data-drawer-placement="right"
-                  class="inline-flex items-center px-3 py-2 text-xs font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900">
+                  class="inline-flex items-center px-3 py-2 text-xs font-medium text-center text-white bg-red-400 rounded-lg hover:bg-red-500 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900">
                   <svg
                     class="w-4 h-4 mr-2"
                     fill="currentColor"

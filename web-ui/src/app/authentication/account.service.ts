@@ -41,8 +41,9 @@ export class AccountService {
   private handleAuthentication(loginResponse: LoginResponse, LoginRequest: LoginRequest) {
     console.log('handleAuthentication',loginResponse);
 
-    localStorage.setItem("access_token", JSON.stringify(loginResponse));
+    localStorage.removeItem("access_token");
 
+    localStorage.setItem("access_token", JSON.stringify(loginResponse));
 
     //TODO : implement remember me
     // if (loginParams.rememberMe) {

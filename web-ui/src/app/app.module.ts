@@ -15,6 +15,10 @@ import { ApiInterceptor } from 'src/http/ApiInterceptor';
 import { TodoListComponent } from './todo/todo-list/todo-list.component';
 import { TodoComponent } from './todo/todo.component';
 import { TodoAddComponent } from './todo/todo-add/todo-add.component';
+import { TodoSearchComponent } from './todo/todo-search/todo-search.component';
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -26,14 +30,17 @@ import { TodoAddComponent } from './todo/todo-add/todo-add.component';
     SidebarComponent,
     TodoListComponent,
     TodoComponent,
-    TodoAddComponent
+    TodoAddComponent,
+    TodoSearchComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot()
   ],
   bootstrap: [RootComponent],
   providers :

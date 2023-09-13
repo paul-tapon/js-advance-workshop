@@ -12,7 +12,6 @@ export class ApiInterceptor implements HttpInterceptor {
       setHeaders: { 'Content-Type': 'application/json' }
     });
 
-    console.log('Interceptor works',newRequest);
     return next.handle(newRequest);
   }
 }

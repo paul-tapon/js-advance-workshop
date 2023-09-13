@@ -1,91 +1,111 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Todo } from '../common/todoTypes';
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
+    FormBuilder,
+    FormControl,
+    FormGroup,
+    Validators,
 } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { formatDate } from '@angular/common';
 import { TodoStoreService } from '../common/todo-store.service';
+import { NotificationService } from 'src/app/common-services/notification.service';
 
 @Component({
-  selector: 'app-todo-add',
-  templateUrl: './todo-add.component.html',
-  styleUrls: ['./todo-add.component.css'],
+    selector: 'app-todo-add',
+    templateUrl: './todo-add.component.html',
 })
 export class TodoAddComponent implements OnInit {
-  @Output()
-  emitCloseAdddForm: EventEmitter<boolean> = new EventEmitter<boolean>();
+    @Output()
+    emitCloseForm: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  createTodoFormGroup: FormGroup;
+    todoFormGroup: FormGroup;
+    private _todoEdit: Todo;
 
-  @Output() cancelEdit = new EventEmitter<Todo>();
-  @Output() editFormSubmitted = new EventEmitter<Todo>();
+    constructor(
+        private formBuilder: FormBuilder,
+        public todoStoreService: TodoStoreService,
+        private notificationService: NotificationService
+    ) {}
 
-  constructor(
-    private formBuilder: FormBuilder,
-    public todoStoreService: TodoStoreService,
-    private detector: ChangeDetectorRef
-  ) {}
+    ngOnInit(): void {
+        this.buildForm();
+    }
 
-  ngOnInit(): void {
-    this.buildForm();
-  }
+    //read only properties of each fields in form group
+    get title() {
+        return this.todoFormGroup.get('title');
+    }
+    get description() {
+        return this.todoFormGroup.get('description');
+    }
+    get dueDate() {
+        return this.todoFormGroup.get('dueDate');
+    }
 
-  //read only properties of each fields in form group
-  get title() {
-    return this.createTodoFormGroup.get('title');
-  }
-  get description() {
-    return this.createTodoFormGroup.get('description');
-  }
-  get dueDate() {
-    return this.createTodoFormGroup.get('dueDate');
-  }
+    @Input()
+    set todoEdit(value: Todo) {
+        this._todoEdit = value;
+        if (this.todoFormGroup) this.displayTodoEditValues(this._todoEdit);
+    }
 
-  onCancelAdd() {
-    console.log('on cancell add');
-    this.emitCloseAdddForm.emit(true);
-  }
+    get todoEdit() {
+        return this._todoEdit;
+    }
 
-  onSubmitForm() {
-    console.log(this.createTodoFormGroup.value);
+    onCancelAdd() {
+        this.emitCloseForm.emit(true);
+    }
 
-    this.todoStoreService.addTodo(this.createTodoFormGroup.value as Todo);
+    onSubmitForm() {
+        console.log(this.todoFormGroup.value);
+        if (this._todoEdit) {
+            this.todoStoreService.updateTodo(
+                this._todoEdit.todoId,
+                this.todoFormGroup.value as Todo
+            );
+            this.notificationService.showSuccess(
+                'Todo successfully updated.',
+                ''
+            );
+        } else {
+            this.todoStoreService.addTodo(this.todoFormGroup.value as Todo);
+            this.notificationService.showSuccess(
+                'Todo successfully created.',
+                ''
+            );
+        }
 
-    this.emitCloseAdddForm.emit(true);
+        this.emitCloseForm.emit(true);
+    }
 
-  }
+    onMyDateChange(event: any) {
+        this.todoFormGroup.patchValue({ dueDate: event.target.value });
+    }
 
-  onMyDateChange(event: any) {
-    this.createTodoFormGroup.patchValue({ dueDate: event.target.value });
-  }
+    private buildForm() {
+        this.todoFormGroup = this.formBuilder.group({
+            title: new FormControl('', [
+                Validators.required,
+                Validators.minLength(6),
+                Validators.maxLength(20),
+            ]),
+            description: new FormControl('', [
+                Validators.required,
+                Validators.minLength(10),
+                Validators.maxLength(100),
+            ]),
+            dueDate: new FormControl('', Validators.required),
+        });
 
+        if (this._todoEdit) {
+            this.displayTodoEditValues(this._todoEdit);
+        }
+    }
 
-  private buildForm() {
-    this.createTodoFormGroup = this.formBuilder.group({
-      title: new FormControl('', [
-        Validators.required,
-        Validators.minLength(6),
-        Validators.maxLength(20),
-      ]),
-      description: new FormControl('', [
-        Validators.required,
-        Validators.minLength(10),
-        Validators.maxLength(100),
-      ]),
-      dueDate: new FormControl('', Validators.required),
-    });
-  }
-
-
+    private displayTodoEditValues(todo: Todo): void {
+        this.todoStoreService.getById(todo.todoId).subscribe(todoDto => {
+            this.todoFormGroup.patchValue(todoDto);
+            this._todoEdit = todoDto;
+        });
+    }
 }

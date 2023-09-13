@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import 'ngx-toastr/toastr';
+
+
+.toast-top-center {
+    bottom: 0;
+    margin: 2px auto;
+    right: 0;
+    left: 0;
+    width: 100%;
+}

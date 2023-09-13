@@ -8,3 +8,7 @@ export interface Todo
     isCompleted:boolean;
 }
 
+export interface TodoPatchResponse
+{
+    success:boolean;
+}

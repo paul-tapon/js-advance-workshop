@@ -2,8 +2,9 @@ import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 
 export function authGuard(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-  console.log('auth guard')
-  if (localStorage.getItem('access_token')) {
+  var accessToken = localStorage.getItem('access_token');
+  //TODO : add validation expiration date
+  if (accessToken) {
     //validate token from server
     return true;
   }

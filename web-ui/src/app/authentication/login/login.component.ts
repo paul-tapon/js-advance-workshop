@@ -5,7 +5,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router';
 import { AccountService } from '../account.service';
 import { BehaviorSubject, Subject, catchError, of, tap } from 'rxjs';
-
+import { DeclarationListEmitMode } from '@angular/compiler';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -20,7 +20,9 @@ export class LoginComponent implements OnInit{
   genericErrorMessage$:BehaviorSubject<string> = new BehaviorSubject<string>('');
 
 
-  constructor(private formBuilder: FormBuilder,private accountService:AccountService,private router:Router){
+  constructor(private formBuilder: FormBuilder,
+            private accountService:AccountService,
+            private router:Router,private detector:ChangeDetectorRef ){
     
   }
 
@@ -46,7 +48,8 @@ export class LoginComponent implements OnInit{
   }
 
   handleLoginError(error: any): any {
-   this.genericErrorMessage$.next("Invalid credentials.");
+    this.genericErrorMessage$.next("");
+    this.detector.detectChanges();
   }
 
   private buildForm(){
@@ -56,7 +59,5 @@ export class LoginComponent implements OnInit{
       rememberMe : [false]
     });
   }
-
-
 
 }

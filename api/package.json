@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npx nodemon ./src/index.ts"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +16,7 @@
     "@types/jsonwebtoken": "^9.0.2",
     "@types/mssql": "^8.1.2",
     "@types/node": "^20.5.9",
+    "nodemon": "^3.0.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   },
