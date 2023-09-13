@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { TodoListComponent } from './todo-list/todo-list.component';
 import { Todo } from './common/todoTypes';
+import { TodoStoreService } from './common/todo-store.service';
 
 @Component({
     selector: 'app-todo',
@@ -10,13 +11,17 @@ import { Todo } from './common/todoTypes';
 })
 export class TodoComponent {
 
-
     @ViewChild('todoList') todoListComponent :TodoListComponent;
     showAddForm$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
         false
     );
-
+ 
     todoEdit : Todo;
+
+    constructor(private todoStoreService : TodoStoreService)
+    {
+        
+    }
 
     showAddForm() {
         this.showAddForm$.next(true);
@@ -34,8 +39,5 @@ export class TodoComponent {
         this.showAddForm$.next(true);
     }
 
-    onEmitSearch(searchQuery) {
-      this.todoListComponent.searchTodo(searchQuery);
-    }
 
 }
