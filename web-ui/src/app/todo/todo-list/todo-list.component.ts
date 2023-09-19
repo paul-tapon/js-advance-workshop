@@ -8,20 +8,12 @@ import { Todo } from '../common/todoTypes';
 })
 export class TodoListComponent {
 
-  @Output()
-  emitUpdateTodo:EventEmitter<Todo> = new EventEmitter<Todo>();
-
   constructor(public todoStoreService: TodoStoreService) {}
 
   todosTrackFn = (i, todo) => todo.id;
 
-  searchTodo(searchQuery:string)
-  {
-    this.todoStoreService.search(searchQuery);
-  }
-
   onUpdateTodo(todo:Todo)
   {
-    this.emitUpdateTodo.emit(todo);
+    this.todoStoreService.currrentTodo = todo;
   }
 }

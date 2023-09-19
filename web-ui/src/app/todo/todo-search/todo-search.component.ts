@@ -19,7 +19,6 @@ export class TodoSearchComponent implements OnInit {
     ngOnInit(): void {
       this.searchControl = new FormControl('');
 
-
       this.searchControl.valueChanges
         .pipe(
           debounceTime(500),

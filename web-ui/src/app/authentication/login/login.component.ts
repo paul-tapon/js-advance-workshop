@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit{
   }
 
   handleLoginError(error: any): any {
-    this.genericErrorMessage$.next("");
+    this.genericErrorMessage$.next("Invalid credentials.");
     this.detector.detectChanges();
   }
 

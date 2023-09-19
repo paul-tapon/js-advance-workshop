@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { TodoListComponent } from './todo-list/todo-list.component';
 import { Todo } from './common/todoTypes';
@@ -9,9 +9,8 @@ import { TodoStoreService } from './common/todo-store.service';
     templateUrl: './todo.component.html',
     styleUrls: ['./todo.component.css'],
 })
-export class TodoComponent {
+export class TodoComponent implements OnInit {
 
-    @ViewChild('todoList') todoListComponent :TodoListComponent;
     showAddForm$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
         false
     );
@@ -23,6 +22,16 @@ export class TodoComponent {
         
     }
 
+    ngOnInit(): void {
+        this.todoStoreService.currentTodo$.subscribe(todo=>{
+            if(todo)
+            {
+                this.todoEdit = todo;
+                this.showAddForm$.next(true);
+            }
+        });
+    }
+
     showAddForm() {
         this.showAddForm$.next(true);
         this.todoEdit = null;
@@ -31,12 +40,6 @@ export class TodoComponent {
     onCancelAdd(eventData: boolean) {
         this.showAddForm$.next(false);
         this.todoEdit = null;
-
-    }
-
-    onEmitUpdateTodo(todo:Todo) {
-        this.todoEdit = todo;
-        this.showAddForm$.next(true);
     }
 
 

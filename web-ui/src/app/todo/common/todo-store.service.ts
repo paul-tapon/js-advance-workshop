@@ -18,6 +18,10 @@ export class TodoStoreService {
     //   create a new BehaviorSubject for it, as well as the observable$, and getters/setters
     private readonly _todos = new BehaviorSubject<Todo[]>([]);
 
+    private readonly _currentTodo = new BehaviorSubject<Todo>(undefined);
+
+    readonly currentTodo$ = this._currentTodo.asObservable();
+
     readonly todos$ = this._todos.asObservable();
 
     // we'll compose the todos$ observable with map operator to create a stream of only completed todos
@@ -43,6 +47,17 @@ export class TodoStoreService {
     // and down to all of its subsribers (ex: this.todos = [])
     set todos(val: Todo[]) {
         this._todos.next(val);
+    }
+
+
+    get currrentTodo() : Todo
+    {
+        return this._currentTodo.getValue();
+    }
+
+    set currrentTodo(val:Todo) 
+    {
+        this._currentTodo.next(val);
     }
 
     addTodo(todo: Todo) : Subscription {

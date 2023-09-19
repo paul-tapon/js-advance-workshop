@@ -52,6 +52,7 @@ export class TodoAddComponent implements OnInit {
         return this._todoEdit;
     }
 
+
     onCancelAdd() {
         this.emitCloseForm.emit(true);
     }
