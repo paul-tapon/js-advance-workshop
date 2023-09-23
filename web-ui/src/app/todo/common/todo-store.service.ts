@@ -9,22 +9,18 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class TodoStoreService {
     
-
-    // - We set the initial state in BehaviorSubject's constructor
-    // - Nobody outside the Store should have access to the BehaviorSubject
-    //   because it has the write rights
-    // - Writing to state should be handled by specialized Store methods (ex: addTodo, removeTodo, etc)
-    // - Create one BehaviorSubject per store entity, for example if you have TodoGroups
-    //   create a new BehaviorSubject for it, as well as the observable$, and getters/setters
     private readonly _todos = new BehaviorSubject<Todo[]>([]);
 
     private readonly _currentTodo = new BehaviorSubject<Todo>(undefined);
+
+    private readonly _openAddEditForm$ = new BehaviorSubject(false);
+
+    readonly openAddEditForm$ = this._openAddEditForm$.asObservable();
 
     readonly currentTodo$ = this._currentTodo.asObservable();
 
     readonly todos$ = this._todos.asObservable();
 
-    // we'll compose the todos$ observable with map operator to create a stream of only completed todos
     readonly completedTodos$ = this.todos$.pipe(
         map(todos => todos.filter(todo => todo.isCompleted))
     );
@@ -34,17 +30,14 @@ export class TodoStoreService {
     );
 
     constructor(private todosService: TodoService) {
-        console.log('TodoStoreService constructor');
         this.getAll();
     }
 
-    // the getter will return the last value emitted in _todos subject
     get todos(): Todo[] {
         return this._todos.getValue();
     }
 
-    // assigning a value to this.todos will push it onto the observable
-    // and down to all of its subsribers (ex: this.todos = [])
+
     set todos(val: Todo[]) {
         this._todos.next(val);
     }
@@ -59,6 +52,17 @@ export class TodoStoreService {
     {
         this._currentTodo.next(val);
     }
+
+    showAddEditForm() : void
+    {
+        this._openAddEditForm$.next(true);
+    }
+
+    hideAddEditForm() : void
+    {
+        this._openAddEditForm$.next(false);
+    }
+
 
     addTodo(todo: Todo) : Subscription {
         todo.todoId = 0;

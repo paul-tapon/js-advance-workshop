@@ -286,6 +286,6 @@ Start developing with an open-source library of over 450+ UI components, section
     tabindex="-1"
     aria-labelledby="drawer-label"
     aria-hidden="false"
-    *ngIf="showAddForm$ | async">
+    *ngIf="openAddEditForm$ | async">
     <app-todo-add (emitCloseForm)="onCancelAdd($event)" [todoEdit]="todoEdit"></app-todo-add>
 </div>

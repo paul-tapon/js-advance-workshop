@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { TodoListComponent } from './todo-list/todo-list.component';
 import { Todo } from './common/todoTypes';
 import { TodoStoreService } from './common/todo-store.service';
@@ -11,9 +11,12 @@ import { TodoStoreService } from './common/todo-store.service';
 })
 export class TodoComponent implements OnInit {
 
-    showAddForm$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-        false
-    );
+    //showAddForm$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
+    openAddEditForm$: Observable<boolean>;
+
+
+
  
     todoEdit : Todo;
 
@@ -27,18 +30,30 @@ export class TodoComponent implements OnInit {
             if(todo)
             {
                 this.todoEdit = todo;
-                this.showAddForm$.next(true);
+                //this.showAddForm$.next(true);
             }
         });
+
+
+        // this.openAddEditForm$= this.todoStoreService.
+        //                         openAddEditForm$.pipe(
+
+        //                             tap((tapData)=>{
+        //                                     console.log("openAddEditForm$",tapData);
+        //                             })
+        //                         );
+
     }
 
     showAddForm() {
-        this.showAddForm$.next(true);
+        this.todoStoreService.showAddEditForm();
+        // this.showAddForm$.next(true);
         this.todoEdit = null;
     }
 
     onCancelAdd(eventData: boolean) {
-        this.showAddForm$.next(false);
+        this.todoStoreService.hideAddEditForm();
+        // this.showAddForm$.next(false);
         this.todoEdit = null;
     }
 
