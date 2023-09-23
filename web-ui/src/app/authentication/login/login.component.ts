@@ -54,8 +54,8 @@ export class LoginComponent implements OnInit{
 
   private buildForm(){
     this.editFormGroup = this.formBuilder.group({
-      username: new FormControl('',Validators.required),
-      password: new FormControl('',Validators.required),
+      username: new FormControl('admin',Validators.required),
+      password: new FormControl('P@$$w0rd2023',Validators.required),
       rememberMe : [false]
     });
   }

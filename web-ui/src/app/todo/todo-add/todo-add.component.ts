@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Todo } from '../common/todoTypes';
 import {
     FormBuilder,
@@ -14,7 +14,7 @@ import { NotificationService } from 'src/app/common-services/notification.servic
     selector: 'app-todo-add',
     templateUrl: './todo-add.component.html',
 })
-export class TodoAddComponent implements OnInit {
+export class TodoAddComponent implements OnInit,OnDestroy {
     @Output()
     emitCloseForm: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -26,6 +26,11 @@ export class TodoAddComponent implements OnInit {
         public todoStoreService: TodoStoreService,
         private notificationService: NotificationService
     ) {}
+
+    ngOnDestroy(): void {
+
+        console.log("on destroy")
+    }
 
     ngOnInit(): void {
         this.buildForm();

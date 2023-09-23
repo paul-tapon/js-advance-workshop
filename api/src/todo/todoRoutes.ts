@@ -56,6 +56,7 @@ todoRouter.get('/', [checkJwt],async (request:Request, response:Response, next:N
       response.json(await repository.getAll());
    } catch (err) {
       response.statusCode = 500;
+      console.log(err);
       response.end();
    }
 });
